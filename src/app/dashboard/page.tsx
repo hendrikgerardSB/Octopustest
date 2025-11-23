@@ -31,8 +31,14 @@ export default function Dashboard() {
 
                     <h2 className="text-xl font-bold text-foreground mb-4">Saved Projects</h2>
                     {savedProjects.length === 0 ? (
-                        <div className="text-center py-12 bg-foreground/5 rounded-lg border border-dashed border-foreground/20">
-                            <p className="text-foreground/60">No saved projects yet. Start configuring!</p>
+                        <div className="text-center py-12 bg-foreground/5 rounded-lg border border-dashed border-foreground/20 flex flex-col items-center justify-center gap-4">
+                            <p className="text-foreground/60">No saved projects yet.</p>
+                            <a
+                                href="/configurator"
+                                className="px-6 py-3 bg-easyfairs-green text-easyfairs-dark rounded-full font-bold hover:bg-white transition-colors"
+                            >
+                                + Start New Project
+                            </a>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">

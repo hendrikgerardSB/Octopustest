@@ -11,7 +11,20 @@ const colors = [
 ];
 
 export default function ConfiguratorControls() {
-    const { wallColor, setWallColor, boothDimensions, setBoothDimensions, addFurniture, saveProject } = useConfiguratorStore();
+    const {
+        wallColor,
+        setWallColor,
+        boothDimensions,
+        setBoothDimensions,
+        saveProject,
+        viewMode,
+        setViewMode,
+        setPlacementMode,
+        getSustainabilityScore,
+        placementMode
+    } = useConfiguratorStore();
+
+    const sustainabilityScore = getSustainabilityScore();
 
     const handleSave = () => {
         const name = prompt("Enter project name:", "My Awesome Booth");
@@ -73,18 +86,20 @@ export default function ConfiguratorControls() {
                 <h3 className="text-sm font-medium text-foreground mb-3">Furniture</h3>
                 <div className="grid grid-cols-2 gap-3">
                     <button
-                        onClick={() => addFurniture('table')}
-                        className="flex flex-col items-center justify-center p-3 border border-foreground/10 rounded-lg hover:border-easyfairs-green hover:bg-easyfairs-green/10 transition-colors"
+                        onClick={() => setPlacementMode('table')}
+                        className={`flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${placementMode === 'table' ? 'border-easyfairs-green bg-green-50 ring-2 ring-easyfairs-green' : 'border-gray-200 hover:border-easyfairs-green hover:bg-green-50'
+                            }`}
                     >
                         <span className="text-2xl mb-1">🪑</span>
-                        <span className="text-xs font-medium text-foreground">Table</span>
+                        <span className="text-xs font-medium">Table</span>
                     </button>
                     <button
-                        onClick={() => addFurniture('chair')}
-                        className="flex flex-col items-center justify-center p-3 border border-foreground/10 rounded-lg hover:border-easyfairs-green hover:bg-easyfairs-green/10 transition-colors"
+                        onClick={() => setPlacementMode('chair')}
+                        className={`flex flex-col items-center justify-center p-3 border rounded-lg transition-colors ${placementMode === 'chair' ? 'border-easyfairs-green bg-green-50 ring-2 ring-easyfairs-green' : 'border-gray-200 hover:border-easyfairs-green hover:bg-green-50'
+                            }`}
                     >
                         <span className="text-2xl mb-1">💺</span>
-                        <span className="text-xs font-medium text-foreground">Chair</span>
+                        <span className="text-xs font-medium">Chair</span>
                     </button>
                 </div>
             </div>
@@ -103,12 +118,14 @@ export default function ConfiguratorControls() {
                 <div className="bg-green-50 p-3 rounded-lg border border-green-100">
                     <div className="flex justify-between items-center mb-2">
                         <span className="text-xs font-semibold text-green-800">Eco-Friendly</span>
-                        <span className="text-xs font-bold text-green-600">85/100</span>
+                        <span className="text-xs font-bold text-green-600">{sustainabilityScore}/100</span>
                     </div>
                     <div className="w-full bg-green-200 rounded-full h-2">
-                        <div className="bg-green-500 h-2 rounded-full" style={{ width: '85%' }}></div>
+                        <div className="bg-green-500 h-2 rounded-full" style={{ width: `${sustainabilityScore}%` }}></div>
                     </div>
-                    <p className="text-[10px] text-green-700 mt-2">Based on modular walls and LED lighting.</p>
+                    <p className="text-[10px] text-green-700 mt-2">
+                        {sustainabilityScore > 80 ? 'Excellent! Very eco-friendly.' : sustainabilityScore > 50 ? 'Good, but could be better.' : 'Consider reducing size or items.'}
+                    </p>
                 </div>
             </div>
 

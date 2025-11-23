@@ -13,6 +13,7 @@ interface SavedProject {
   id: string;
   name: string;
   date: string;
+  thumbnail?: string;
   wallColor: string;
   boothDimensions: { width: number; depth: number };
   furniture: FurnitureItem[];
@@ -23,21 +24,30 @@ interface ConfiguratorState {
   boothDimensions: { width: number; depth: number };
   furniture: FurnitureItem[];
   savedProjects: SavedProject[];
+  viewMode: '2D' | '3D';
+  placementMode: 'table' | 'chair' | null;
   setWallColor: (color: string) => void;
   setBoothDimensions: (dimensions: { width: number; depth: number }) => void;
-  addFurniture: (item: Product | 'table' | 'chair') => void;
+  addFurniture: (item: Product | 'table' | 'chair', position?: [number, number, number]) => void;
   removeFurniture: (id: string) => void;
   saveProject: (name: string) => void;
+  setViewMode: (mode: '2D' | '3D') => void;
+  setPlacementMode: (mode: 'table' | 'chair' | null) => void;
+  getSustainabilityScore: () => number;
 }
 
-export const useConfiguratorStore = create<ConfiguratorState>((set) => ({
+export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
   wallColor: '#ffffff',
   boothDimensions: { width: 4, depth: 3 },
   furniture: [],
   savedProjects: [],
+  viewMode: '3D',
+  placementMode: null,
   setWallColor: (color) => set({ wallColor: color }),
   setBoothDimensions: (dimensions) => set({ boothDimensions: dimensions }),
-  addFurniture: (item) =>
+  setViewMode: (mode) => set({ viewMode: mode }),
+  setPlacementMode: (mode) => set({ placementMode: mode }),
+  addFurniture: (item, position = [0, 0, 0]) =>
     set((state) => {
       const type = typeof item === 'string' ? item : item.type;
       const productId = typeof item === 'string' ? undefined : item.id;
@@ -49,10 +59,11 @@ export const useConfiguratorStore = create<ConfiguratorState>((set) => ({
             id: Math.random().toString(36).substr(2, 9),
             productId,
             type,
-            position: [0, 0, 0],
+            position,
             rotation: [0, 0, 0],
           },
         ],
+        placementMode: null, // Exit placement mode after adding
       };
     }),
   removeFurniture: (id) =>
@@ -60,17 +71,26 @@ export const useConfiguratorStore = create<ConfiguratorState>((set) => ({
       furniture: state.furniture.filter((item) => item.id !== id),
     })),
   saveProject: (name) =>
-    set((state) => ({
-      savedProjects: [
-        ...state.savedProjects,
-        {
-          id: Math.random().toString(36).substr(2, 9),
-          name,
-          date: new Date().toLocaleDateString(),
-          wallColor: state.wallColor,
-          boothDimensions: state.boothDimensions,
-          furniture: state.furniture,
-        },
-      ],
-    })),
+    set((state) => {
+      const newProject: SavedProject = {
+        id: Math.random().toString(36).substr(2, 9),
+        name,
+        date: new Date().toLocaleDateString(),
+        thumbnail: '/placeholder-project.png',
+        wallColor: state.wallColor,
+        boothDimensions: state.boothDimensions,
+        furniture: state.furniture,
+      };
+      return { savedProjects: [...state.savedProjects, newProject] };
+    }),
+  getSustainabilityScore: () => {
+    const { furniture, boothDimensions } = get();
+    let score = 100;
+    // Deduct for size
+    score -= (boothDimensions.width * boothDimensions.depth) * 0.5;
+    // Deduct for furniture count (simulating resource usage)
+    score -= furniture.length * 2;
+    // Cap at 0-100
+    return Math.max(0, Math.min(100, Math.round(score)));
+  }
 }));
