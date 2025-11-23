@@ -3,11 +3,17 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --easyfairs-green: #80FFB6;
+  --easyfairs-dark: #1E293B;
+  --easyfairs-slate: #475569;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-easyfairs-green: var(--easyfairs-green);
+  --color-easyfairs-dark: var(--easyfairs-dark);
+  --color-easyfairs-slate: var(--easyfairs-slate);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
