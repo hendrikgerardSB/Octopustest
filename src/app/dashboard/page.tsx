@@ -1,53 +1,57 @@
+"use client";
+
 import Navbar from '@/components/layout/Navbar';
+import { useConfiguratorStore } from '@/store/configuratorStore';
 
 export default function Dashboard() {
+    const savedProjects = useConfiguratorStore((state) => state.savedProjects);
+
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-background">
             <Navbar />
             <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
                 <div className="px-4 py-6 sm:px-0">
-                    <h1 className="text-3xl font-bold text-easyfairs-dark mb-6">Dashboard</h1>
+                    <h1 className="text-3xl font-bold text-foreground mb-6">Dashboard</h1>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                         {/* Quick Stats */}
-                        <div className="bg-white overflow-hidden shadow rounded-lg p-6">
-                            <dt className="text-sm font-medium text-gray-500 truncate">Active Projects</dt>
-                            <dd className="mt-1 text-3xl font-semibold text-easyfairs-dark">3</dd>
+                        <div className="bg-foreground/5 overflow-hidden rounded-lg p-6 border border-foreground/10">
+                            <dt className="text-sm font-medium text-foreground/60 truncate">Active Projects</dt>
+                            <dd className="mt-1 text-3xl font-semibold text-foreground">{savedProjects.length}</dd>
                         </div>
-                        <div className="bg-white overflow-hidden shadow rounded-lg p-6">
-                            <dt className="text-sm font-medium text-gray-500 truncate">Pending Reviews</dt>
-                            <dd className="mt-1 text-3xl font-semibold text-easyfairs-dark">1</dd>
+                        <div className="bg-foreground/5 overflow-hidden rounded-lg p-6 border border-foreground/10">
+                            <dt className="text-sm font-medium text-foreground/60 truncate">Pending Reviews</dt>
+                            <dd className="mt-1 text-3xl font-semibold text-foreground">1</dd>
                         </div>
-                        <div className="bg-white overflow-hidden shadow rounded-lg p-6">
-                            <dt className="text-sm font-medium text-gray-500 truncate">Total Orders</dt>
-                            <dd className="mt-1 text-3xl font-semibold text-easyfairs-dark">12</dd>
-                        </div>
-
-                        {/* Recent Activity Placeholder */}
-                        <div className="bg-white shadow rounded-lg md:col-span-3 p-6">
-                            <h2 className="text-lg font-medium text-easyfairs-dark mb-4">Recent Activity</h2>
-                            <div className="border-l-4 border-easyfairs-green bg-green-50 p-4 mb-4">
-                                <div className="flex">
-                                    <div className="ml-3">
-                                        <p className="text-sm text-green-700">
-                                            Project "TechExpo 2025" was updated 2 hours ago.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="border-l-4 border-gray-200 bg-gray-50 p-4">
-                                <div className="flex">
-                                    <div className="ml-3">
-                                        <p className="text-sm text-gray-700">
-                                            New catalog items added for "Furniture" category.
-                                        </p>
-                                    </div>
-                                </div>
-                            </div>
+                        <div className="bg-foreground/5 overflow-hidden rounded-lg p-6 border border-foreground/10">
+                            <dt className="text-sm font-medium text-foreground/60 truncate">Total Orders</dt>
+                            <dd className="mt-1 text-3xl font-semibold text-foreground">12</dd>
                         </div>
                     </div>
+
+                    <h2 className="text-xl font-bold text-foreground mb-4">Saved Projects</h2>
+                    {savedProjects.length === 0 ? (
+                        <div className="text-center py-12 bg-foreground/5 rounded-lg border border-dashed border-foreground/20">
+                            <p className="text-foreground/60">No saved projects yet. Start configuring!</p>
+                        </div>
+                    ) : (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {savedProjects.map((project) => (
+                                <div key={project.id} className="bg-foreground/5 rounded-lg p-6 border border-foreground/10 hover:border-easyfairs-green transition-colors cursor-pointer">
+                                    <h3 className="text-lg font-bold text-foreground">{project.name}</h3>
+                                    <p className="text-sm text-foreground/60 mb-4">Saved on {project.date}</p>
+                                    <div className="flex gap-2 text-xs text-foreground/50">
+                                        <span>{project.boothDimensions.width}x{project.boothDimensions.depth}m</span>
+                                        <span>•</span>
+                                        <span>{project.furniture.length} items</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
             </main>
         </div>
     );
 }
+

@@ -1,62 +1,76 @@
 import { create } from 'zustand';
+import { Product } from '@/data/products';
 
-export type BoothItem = {
+interface FurnitureItem {
   id: string;
-  type: 'furniture' | 'structure';
-  modelUrl?: string; // For now, we might just use primitive types
-  name: string;
+  productId?: string;
+  type: 'table' | 'chair';
   position: [number, number, number];
   rotation: [number, number, number];
-  scale: [number, number, number];
-  color?: string;
-};
+}
+
+interface SavedProject {
+  id: string;
+  name: string;
+  date: string;
+  wallColor: string;
+  boothDimensions: { width: number; depth: number };
+  furniture: FurnitureItem[];
+}
 
 interface ConfiguratorState {
-  dimensions: { width: number; depth: number };
-  items: BoothItem[];
-  wallTexture: string | null;
-  floorTexture: string | null;
   wallColor: string;
-  floorColor: string;
-  
-  setDimensions: (width: number, depth: number) => void;
-  addItem: (item: Omit<BoothItem, 'id'>) => void;
-  removeItem: (id: string) => void;
-  updateItemPosition: (id: string, position: [number, number, number]) => void;
+  boothDimensions: { width: number; depth: number };
+  furniture: FurnitureItem[];
+  savedProjects: SavedProject[];
   setWallColor: (color: string) => void;
-  setFloorColor: (color: string) => void;
-  reset: () => void;
+  setBoothDimensions: (dimensions: { width: number; depth: number }) => void;
+  addFurniture: (item: Product | 'table' | 'chair') => void;
+  removeFurniture: (id: string) => void;
+  saveProject: (name: string) => void;
 }
 
 export const useConfiguratorStore = create<ConfiguratorState>((set) => ({
-  dimensions: { width: 3, depth: 3 }, // Default 3x3 meters
-  items: [],
-  wallTexture: null,
-  floorTexture: null,
   wallColor: '#ffffff',
-  floorColor: '#e5e5e5',
-
-  setDimensions: (width, depth) => set({ dimensions: { width, depth } }),
-  
-  addItem: (item) => set((state) => ({
-    items: [...state.items, { ...item, id: Math.random().toString(36).substr(2, 9) }]
-  })),
-  
-  removeItem: (id) => set((state) => ({
-    items: state.items.filter((i) => i.id !== id)
-  })),
-  
-  updateItemPosition: (id, position) => set((state) => ({
-    items: state.items.map((i) => i.id === id ? { ...i, position } : i)
-  })),
-
+  boothDimensions: { width: 4, depth: 3 },
+  furniture: [],
+  savedProjects: [],
   setWallColor: (color) => set({ wallColor: color }),
-  setFloorColor: (color) => set({ floorColor: color }),
-  
-  reset: () => set({
-    dimensions: { width: 3, depth: 3 },
-    items: [],
-    wallColor: '#ffffff',
-    floorColor: '#e5e5e5'
-  })
+  setBoothDimensions: (dimensions) => set({ boothDimensions: dimensions }),
+  addFurniture: (item) =>
+    set((state) => {
+      const type = typeof item === 'string' ? item : item.type;
+      const productId = typeof item === 'string' ? undefined : item.id;
+
+      return {
+        furniture: [
+          ...state.furniture,
+          {
+            id: Math.random().toString(36).substr(2, 9),
+            productId,
+            type,
+            position: [0, 0, 0],
+            rotation: [0, 0, 0],
+          },
+        ],
+      };
+    }),
+  removeFurniture: (id) =>
+    set((state) => ({
+      furniture: state.furniture.filter((item) => item.id !== id),
+    })),
+  saveProject: (name) =>
+    set((state) => ({
+      savedProjects: [
+        ...state.savedProjects,
+        {
+          id: Math.random().toString(36).substr(2, 9),
+          name,
+          date: new Date().toLocaleDateString(),
+          wallColor: state.wallColor,
+          boothDimensions: state.boothDimensions,
+          furniture: state.furniture,
+        },
+      ],
+    })),
 }));

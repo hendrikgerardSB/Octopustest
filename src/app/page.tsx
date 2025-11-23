@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -12,9 +12,9 @@ export default function Home() {
         </p>
 
         <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <button className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-easyfairs-green text-easyfairs-dark gap-2 hover:bg-white hover:text-black text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 font-bold cursor-pointer">
+          <Link href="/configurator" className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-easyfairs-green text-easyfairs-dark gap-2 hover:bg-white hover:text-black text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 font-bold cursor-pointer">
             Start Configuration
-          </button>
+          </Link>
           <button className="rounded-full border border-solid border-white/20 transition-colors flex items-center justify-center bg-white/10 text-white gap-2 hover:bg-white/20 text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
             View Documentation
           </button>
