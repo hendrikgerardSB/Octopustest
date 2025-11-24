@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/layout/Navbar';
 import { useConfiguratorStore } from '@/store/configuratorStore';
-import GlassCard from '@/components/ui/GlassCard';
+import Card from '@/components/ui/Card';
 import { User, Calendar, MapPin, Clock, Plus } from 'lucide-react';
 
 export default function Dashboard() {
@@ -23,7 +23,7 @@ export default function Dashboard() {
     ];
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen bg-background">
             <Navbar />
             <main className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 
@@ -37,7 +37,7 @@ export default function Dashboard() {
                     </div>
                     <a
                         href="/configurator"
-                        className="glass-button px-6 py-3 rounded-full font-bold flex items-center gap-2 group"
+                        className="px-6 py-3 bg-easyfairs-green text-easyfairs-dark rounded-full font-bold flex items-center gap-2 hover:bg-white transition-colors group"
                     >
                         <Plus className="w-5 h-5 group-hover:rotate-90 transition-transform" />
                         New Project
@@ -48,14 +48,14 @@ export default function Dashboard() {
 
                     {/* Left Column: Profile & Quick Stats */}
                     <div className="space-y-8">
-                        <GlassCard className="flex flex-col items-center text-center py-8">
+                        <Card className="flex flex-col items-center text-center py-8">
                             <div className="w-24 h-24 rounded-full bg-gradient-to-br from-easyfairs-green to-blue-500 flex items-center justify-center text-3xl font-bold text-easyfairs-dark mb-4 shadow-lg shadow-easyfairs-green/20">
                                 {userProfile.avatar}
                             </div>
                             <h2 className="text-xl font-bold text-foreground">{userProfile.name}</h2>
                             <p className="text-sm text-foreground/60 mb-6">{userProfile.role} at {userProfile.company}</p>
 
-                            <div className="w-full grid grid-cols-2 gap-4 border-t border-white/10 pt-6">
+                            <div className="w-full grid grid-cols-2 gap-4 border-t border-foreground/10 pt-6">
                                 <div>
                                     <div className="text-2xl font-bold text-foreground">{savedProjects.length}</div>
                                     <div className="text-xs text-foreground/50 uppercase tracking-wider">Active</div>
@@ -65,9 +65,9 @@ export default function Dashboard() {
                                     <div className="text-xs text-foreground/50 uppercase tracking-wider">Past</div>
                                 </div>
                             </div>
-                        </GlassCard>
+                        </Card>
 
-                        <GlassCard>
+                        <Card>
                             <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
                                 <Clock className="w-5 h-5 text-easyfairs-green" />
                                 Recent Activity
@@ -88,7 +88,7 @@ export default function Dashboard() {
                                     </div>
                                 </div>
                             </div>
-                        </GlassCard>
+                        </Card>
                     </div>
 
                     {/* Right Column: Active Projects & Past Fairs */}
@@ -101,13 +101,13 @@ export default function Dashboard() {
                             </div>
 
                             {savedProjects.length === 0 ? (
-                                <GlassCard className="text-center py-12 border-dashed border-white/20 flex flex-col items-center justify-center gap-4">
+                                <Card className="text-center py-12 border-dashed border-foreground/20 flex flex-col items-center justify-center gap-4 bg-transparent">
                                     <p className="text-foreground/60">No active projects. Start designing your next booth!</p>
-                                </GlassCard>
+                                </Card>
                             ) : (
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     {savedProjects.map((project) => (
-                                        <GlassCard key={project.id} hoverEffect={true} className="group relative overflow-hidden">
+                                        <Card key={project.id} hoverEffect={true} className="group relative overflow-hidden">
                                             <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
                                                 <MapPin className="w-24 h-24 text-easyfairs-green transform rotate-12 translate-x-4 -translate-y-4" />
                                             </div>
@@ -115,10 +115,10 @@ export default function Dashboard() {
                                             <p className="text-sm text-foreground/60 mb-4">Last edited: {project.date}</p>
 
                                             <div className="flex flex-wrap gap-2 mb-6">
-                                                <span className="px-2 py-1 rounded bg-white/5 text-xs text-foreground/80 border border-white/10">
+                                                <span className="px-2 py-1 rounded bg-foreground/5 text-xs text-foreground/80 border border-foreground/10">
                                                     {project.boothDimensions.width}x{project.boothDimensions.depth}m
                                                 </span>
-                                                <span className="px-2 py-1 rounded bg-white/5 text-xs text-foreground/80 border border-white/10">
+                                                <span className="px-2 py-1 rounded bg-foreground/5 text-xs text-foreground/80 border border-foreground/10">
                                                     {project.furniture.length} items
                                                 </span>
                                             </div>
@@ -127,11 +127,11 @@ export default function Dashboard() {
                                                 <button className="flex-1 py-2 bg-easyfairs-green/10 hover:bg-easyfairs-green/20 text-easyfairs-green text-sm font-medium rounded transition-colors">
                                                     Edit
                                                 </button>
-                                                <button className="px-3 py-2 bg-white/5 hover:bg-white/10 text-foreground text-sm rounded transition-colors">
+                                                <button className="px-3 py-2 bg-foreground/5 hover:bg-foreground/10 text-foreground text-sm rounded transition-colors">
                                                     Preview
                                                 </button>
                                             </div>
-                                        </GlassCard>
+                                        </Card>
                                     ))}
                                 </div>
                             )}
@@ -142,9 +142,9 @@ export default function Dashboard() {
                             <h2 className="text-2xl font-bold text-foreground mb-6">Past Fairs</h2>
                             <div className="space-y-4">
                                 {pastFairs.map((fair) => (
-                                    <GlassCard key={fair.id} hoverEffect={true} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+                                    <Card key={fair.id} hoverEffect={true} className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
                                         <div className="flex items-start gap-4">
-                                            <div className="w-12 h-12 rounded-lg bg-white/5 flex items-center justify-center shrink-0 border border-white/10">
+                                            <div className="w-12 h-12 rounded-lg bg-foreground/5 flex items-center justify-center shrink-0 border border-foreground/10">
                                                 <Calendar className="w-6 h-6 text-foreground/60" />
                                             </div>
                                             <div>
@@ -166,7 +166,7 @@ export default function Dashboard() {
                                                 View Details
                                             </button>
                                         </div>
-                                    </GlassCard>
+                                    </Card>
                                 ))}
                             </div>
                         </section>
