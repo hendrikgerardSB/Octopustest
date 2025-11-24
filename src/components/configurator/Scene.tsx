@@ -55,6 +55,7 @@ export default function Scene() {
                     {furniture.map((item) => (
                         <FurnitureItem
                             key={item.id}
+                            id={item.id}
                             type={item.type}
                             position={item.position}
                             rotation={item.rotation}
@@ -64,7 +65,7 @@ export default function Scene() {
                     {/* Ghost Item */}
                     {placementMode && ghostPosition && (
                         <group position={ghostPosition}>
-                            <FurnitureItem type={placementMode} position={[0, 0, 0]} rotation={[0, 0, 0]} />
+                            <FurnitureItem id="ghost" type={placementMode} position={[0, 0, 0]} rotation={[0, 0, 0]} />
                             <mesh position={[0, 0.1, 0]}>
                                 <boxGeometry args={[1, 1, 1]} />
                                 <meshBasicMaterial color="blue" wireframe opacity={0.5} transparent />

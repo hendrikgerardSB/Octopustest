@@ -1,15 +1,15 @@
 import { create } from 'zustand';
 import { Product } from '@/data/products';
 
-interface FurnitureItem {
+export interface FurnitureItem {
   id: string;
   productId?: string;
-  type: 'table' | 'chair';
+  type: 'table' | 'chair' | 'sofa' | 'bar_stool' | 'spotlight' | 'floor_lamp' | 'led_strip' | 'plant' | 'rug' | 'wall_art' | 'panel' | 'glass_panel' | 'door';
   position: [number, number, number];
   rotation: [number, number, number];
 }
 
-interface SavedProject {
+export interface SavedProject {
   id: string;
   name: string;
   date: string;
@@ -25,14 +25,16 @@ interface ConfiguratorState {
   furniture: FurnitureItem[];
   savedProjects: SavedProject[];
   viewMode: '2D' | '3D';
-  placementMode: 'table' | 'chair' | null;
+  placementMode: 'table' | 'chair' | 'sofa' | 'bar_stool' | 'spotlight' | 'floor_lamp' | 'led_strip' | 'plant' | 'rug' | 'wall_art' | 'panel' | 'glass_panel' | 'door' | null;
   setWallColor: (color: string) => void;
   setBoothDimensions: (dimensions: { width: number; depth: number }) => void;
-  addFurniture: (item: Product | 'table' | 'chair', position?: [number, number, number]) => void;
+  addFurniture: (item: Product | 'table' | 'chair' | 'sofa' | 'bar_stool' | 'spotlight' | 'floor_lamp' | 'led_strip' | 'plant' | 'rug' | 'wall_art' | 'panel' | 'glass_panel' | 'door', position?: [number, number, number]) => void;
   removeFurniture: (id: string) => void;
+  updateFurniturePosition: (id: string, position: [number, number, number]) => void;
   saveProject: (name: string) => void;
+  loadProject: (project: SavedProject) => void;
   setViewMode: (mode: '2D' | '3D') => void;
-  setPlacementMode: (mode: 'table' | 'chair' | null) => void;
+  setPlacementMode: (mode: 'table' | 'chair' | 'sofa' | 'bar_stool' | 'spotlight' | 'floor_lamp' | 'led_strip' | 'plant' | 'rug' | 'wall_art' | 'panel' | 'glass_panel' | 'door' | null) => void;
   getSustainabilityScore: () => number;
 }
 
@@ -70,6 +72,12 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
     set((state) => ({
       furniture: state.furniture.filter((item) => item.id !== id),
     })),
+  updateFurniturePosition: (id, position) =>
+    set((state) => ({
+      furniture: state.furniture.map((item) =>
+        item.id === id ? { ...item, position } : item
+      ),
+    })),
   saveProject: (name) =>
     set((state) => {
       const newProject: SavedProject = {
@@ -82,6 +90,12 @@ export const useConfiguratorStore = create<ConfiguratorState>((set, get) => ({
         furniture: state.furniture,
       };
       return { savedProjects: [...state.savedProjects, newProject] };
+    }),
+  loadProject: (project: SavedProject) =>
+    set({
+      wallColor: project.wallColor,
+      boothDimensions: project.boothDimensions,
+      furniture: project.furniture,
     }),
   getSustainabilityScore: () => {
     const { furniture, boothDimensions } = get();
