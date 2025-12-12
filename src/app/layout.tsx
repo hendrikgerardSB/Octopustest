@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Easyfairs Configurator",
-  description: "Configure your perfect stand",
+  title: "Hommel",
+  description: "Hommel Website",
 };
 
 export default function RootLayout({
